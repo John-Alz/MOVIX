@@ -8,28 +8,14 @@ import 'swiper/css/pagination';
 
 // import required modules
 import { Pagination } from 'swiper/modules';
+import { useFetch } from '../hooks/useFetch';
 
 export default function MoviesHome() {
 
-    const [data, setData] = useState([]);
-
     const api_key = "155ac120887e5a211953b1e9e999319f";
 
-    useEffect(() => {
-        try {
-            fetch(`https://api.themoviedb.org/3/discover/movie?api_key=${api_key}`)
-                .then((res) => res.json())
-                .then((data) => {
-                    setData(data.results)
-                })
-                .catch(err => console.error(err))
-        } catch (error) {
-            console.error(`FALLO: ${error}`)
-        }
-    }, [])
 
-
-
+    const { data, loading, error } = useFetch(`https://api.themoviedb.org/3/discover/movie?api_key=${api_key}`)
 
     return (
         <div className='ml-16'>
@@ -46,6 +32,8 @@ export default function MoviesHome() {
                 modules={[Pagination]}
                 className="mySwiper"
             >
+                {error && <p>ERROR: {error}</p>}
+                {loading && <p>Loading</p>}
                 {
                     data.map((element) => {
                         return (

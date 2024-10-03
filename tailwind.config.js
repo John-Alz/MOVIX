@@ -8,7 +8,10 @@ export default {
     extend: {
       fontFamily: {
         'Urbanist': ["Urbanist", "system-ui"]
-      }
+      },
+      colors: {
+        'custom-gray': 'rgb(80, 76, 76)', // Add your custom color
+      },
     },
   },
   plugins: [],

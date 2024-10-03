@@ -8,29 +8,13 @@ import 'swiper/css/pagination';
 
 // import required modules
 import { Pagination } from 'swiper/modules';
+import { useFetch } from '../hooks/useFetch';
 
 export default function Upcoming() {
 
-    const [data, setData] = useState([]);
-    const [index, setIndex] = useState(1)
-
     const api_key = "155ac120887e5a211953b1e9e999319f";
 
-    useEffect(() => {
-        try {
-            fetch(`https://api.themoviedb.org/3/movie/upcoming?api_key=${api_key}`)
-                .then((res) => res.json())
-                .then((data) => {
-                    setData(data.results)
-                })
-                .catch(err => console.error(err))
-        } catch (error) {
-            console.error(`FALLO: ${error}`)
-        }
-    }, [])
-
-
-
+    const { data, loading, error } = useFetch(`https://api.themoviedb.org/3/movie/upcoming?api_key=${api_key}`)
 
     return (
         <div className='ml-16'>
@@ -46,13 +30,15 @@ export default function Upcoming() {
                 modules={[Pagination]}
                 className="mySwiper"
             >
+                {error && <p>ERROR: {error}</p>}
+                {loading && <p>Loading</p>}
                 {
-                    data.map((element) => {
+                    data.map((element, index) => {
                         return (
                             <div key={element.id}>
                                 <SwiperSlide className='cursor-pointer'>
                                     <div className='flex'>
-                                        <p className='text-white text-6xl flex items-center mr-4'>1</p>
+                                        <p className='text-white text-6xl flex items-center mr-4'>{index + 1}</p>
                                         <img className='w-[30%] rounded-lg' src={`https://image.tmdb.org/t/p/w1280/${element.poster_path}`} />
                                         <div className='text-white flex flex-col gap-3 pl-2 '>
                                             <p>{element.original_title.slice(0, 13)}</p>

@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
+
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -8,28 +9,15 @@ import 'swiper/css/pagination';
 
 // import required modules
 import { Pagination } from 'swiper/modules';
+import { useFetch } from '../hooks/useFetch';
+
 
 export default function JustReleased() {
-
-    const [data, setData] = useState([]);
     const [value, setValue] = useState("day")
 
     const api_key = "155ac120887e5a211953b1e9e999319f";
 
-    useEffect(() => {
-        try {
-            fetch(`https://api.themoviedb.org/3/trending/movie/${value}?api_key=${api_key}`)
-                .then((res) => res.json())
-                .then((data) => {
-                    setData(data.results)
-                })
-                .catch(err => console.error(err))
-        } catch (error) {
-            console.error(`FALLO: ${error}`)
-        }
-    }, [value])
-
-
+    const { data, loading, error } = useFetch(`https://api.themoviedb.org/3/trending/movie/${value}?api_key=${api_key}`)
 
     return (
         <div className='ml-16'>
@@ -63,8 +51,10 @@ export default function JustReleased() {
                 modules={[Pagination]}
                 className="mySwiper"
             >
+                {error && <p className='text-white text-center'>Error: {error}</p>}
+                {loading && <p className='text-white text-center'>Loading</p>}
                 {
-                    data.map((element) => {
+                    data?.map((element) => {
                         return (
                             <div key={element.id} >
                                 <SwiperSlide className='cursor-pointer'>

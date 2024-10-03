@@ -6,6 +6,7 @@ import { IoMenu } from "react-icons/io5";
 import { IoMdClose } from "react-icons/io";
 
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 
 export default function Navbar() {
@@ -19,19 +20,15 @@ export default function Navbar() {
     }
 
     return (
-        <header className="relative h-screen">
+        <header className="reati">
 
-            <div className='absolute  w-full h-screen'>
-                <Carousel />
-            </div>
-
-            <div className=' w-11/12 m-auto relative z-20 text-white pt-5'>
+            <div className=' w-11/12 left-[4%] absolute z-20 text-white pt-5'>
                 <nav className='flex justify-between items-center'>
                     <h2 className='text-2xl md:text-4xl font-Urbanist font-bold cursor-pointer'>MOVIX</h2>
                     <div className="hidden xl:block"></div>
                     <ul className='hidden xl:flex gap-x-8 font-Urbanist'>
-                        <li className='hover:border-b-2'><a href='#'>Para ti</a></li>
-                        <li className='hover:border-b-2'><a href='#'>Peliculas</a></li>
+                        <li className='hover:border-b-2'><Link to={"/"}>Para ti</Link></li>
+                        <li className='hover:border-b-2'><Link to={"/peliculas"}>Peliculas</Link></li>
                         <li className='hover:border-b-2'><a href='#'>Series</a></li>
                         <li className='hover:border-b-2'><a href='#'>Infantil</a></li>
                         <li className='hover:border-b-2'><a href='#'>Favoritos</a></li>
