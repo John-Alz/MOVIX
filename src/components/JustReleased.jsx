@@ -10,14 +10,28 @@ import 'swiper/css/pagination';
 // import required modules
 import { Pagination } from 'swiper/modules';
 import { useFetch } from '../hooks/useFetch';
+import { useDispatch, useSelector } from 'react-redux';
+import { addMoviesFavorites } from '../redux/moviesSlice';
 
 
 export default function JustReleased() {
     const [value, setValue] = useState("day")
 
+    const dispatch = useDispatch();
+
     const api_key = "155ac120887e5a211953b1e9e999319f";
 
-    const { data, loading, error } = useFetch(`https://api.themoviedb.org/3/trending/movie/${value}?api_key=${api_key}`)
+    useFetch(`https://api.themoviedb.org/3/trending/movie/${value}?api_key=${api_key}`)
+
+    const data = useSelector(state => state.movies.trendingMovies)
+    const loading = useSelector(state => state.movies.loading)
+    const error = useSelector(state => state.movies.error)
+
+    const handleFavorites = (id) => {
+        let movieFound = data.find((movie) => movie.id === id)
+        dispatch(addMoviesFavorites(movieFound))
+    }
+
 
     return (
         <div className='ml-16'>
@@ -54,17 +68,15 @@ export default function JustReleased() {
                 {error && <p className='text-white text-center'>Error: {error}</p>}
                 {loading && <p className='text-white text-center'>Loading</p>}
                 {
-                    data?.map((element) => {
+                    data?.map((element, index) => {
                         return (
-                            <div key={element.id} >
+                            <div key={index} >
                                 <SwiperSlide className='cursor-pointer'>
                                     <img src={`https://image.tmdb.org/t/p/w1280/${element.poster_path}`} />
                                     <div className='text-white'>
-                                        <p>{element.original_title}</p>
-                                        <div className='flex gap-3'>
-                                            <span>{`⭐ ${element.vote_average}`}</span>
-                                            <span>| Accion, Terror</span>
-                                        </div>
+                                        <h2 className='text-lgl'>{element.original_title.slice(0, 30)}</h2>
+                                        <p className='text-sm text-[gray]'>{element.release_date}</p>
+                                        <button onClick={() => { handleFavorites(element.id) }} className='p-8cursor-pointer bg-red-200'>Like</button>
                                     </div>
                                 </SwiperSlide>
                             </div>

@@ -1,22 +1,32 @@
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { setError, setLoading, setMoviesList, setTrendingMovies, setTvList, setUpCommingMovies } from "../redux/moviesSlice";
 
 export function useFetch(url) {
-    const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+
+    const dispatch = useDispatch()
 
 
     useEffect(() => {
-        setLoading(true);
+
+        dispatch(setLoading(true))
         fetch(url)
             .then((res) => res.json())
             .then((data) => {
-                setData(data.results)
+                if (url.includes('trending/movie')) {
+                    dispatch(setTrendingMovies(data.results));
+                } else if (url.includes('movie/upcoming')) {
+                    dispatch(setUpCommingMovies(data.results));
+                } else if (url.includes('discover/movie')) {
+                    dispatch(setMoviesList(data.results));
+                } else if (url.includes('discover/tv')) {
+                    dispatch(setTvList(data.results));
+                }
             })
-            .catch(error => setError(error))
-            .finally(() => setLoading(false));
+            .catch(error => dispatch(setError(error)))
+            .finally(() => dispatch(setLoading(false)));
 
-    }, [url])
+    }, [url, dispatch])
 
-    return { data, loading, error }
+
 }

@@ -9,13 +9,18 @@ import 'swiper/css/pagination';
 // import required modules
 import { Pagination } from 'swiper/modules';
 import { useFetch } from '../hooks/useFetch';
+import { useSelector } from 'react-redux';
 
 export default function MoviesHome() {
 
     const api_key = "155ac120887e5a211953b1e9e999319f";
 
 
-    const { data, loading, error } = useFetch(`https://api.themoviedb.org/3/discover/movie?api_key=${api_key}`)
+    useFetch(`https://api.themoviedb.org/3/discover/movie?api_key=${api_key}`)
+
+    const data = useSelector(state => state.movies.moviesList)
+    const loading = useSelector(state => state.movies.loading)
+    const error = useSelector(state => state.movies.error)
 
     return (
         <div className='ml-16'>
@@ -35,9 +40,9 @@ export default function MoviesHome() {
                 {error && <p>ERROR: {error}</p>}
                 {loading && <p>Loading</p>}
                 {
-                    data.map((element) => {
+                    data.map((element, index) => {
                         return (
-                            <div key={element.id}>
+                            <div key={index}>
                                 <SwiperSlide className='cursor-pointer'>
                                     <div className='flex flex-col'>
                                         <img className='w-[100%] rounded-lg' src={`https://image.tmdb.org/t/p/w1280/${element.backdrop_path}`} />

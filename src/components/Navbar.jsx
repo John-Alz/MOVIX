@@ -31,7 +31,7 @@ export default function Navbar() {
                         <li className='hover:border-b-2'><Link to={"/peliculas"}>Peliculas</Link></li>
                         <li className='hover:border-b-2'><a href='#'>Series</a></li>
                         <li className='hover:border-b-2'><a href='#'>Infantil</a></li>
-                        <li className='hover:border-b-2'><a href='#'>Favoritos</a></li>
+                        <li className='hover:border-b-2'><Link to={'/favoritas'}>Favoritos</Link></li>
                     </ul>
                     <div className='flex gap-5'>
                         <form className='flex items-center relative'>

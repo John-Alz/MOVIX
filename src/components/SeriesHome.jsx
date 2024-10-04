@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -9,13 +9,18 @@ import 'swiper/css/pagination';
 // import required modules
 import { Pagination } from 'swiper/modules';
 import { useFetch } from '../hooks/useFetch';
+import { useSelector } from 'react-redux';
 
 export default function SeriesHome() {
 
     const api_key = "155ac120887e5a211953b1e9e999319f";
 
 
-    const { data, loading, error } = useFetch(`https://api.themoviedb.org/3/discover/tv?api_key=${api_key}`)
+    useFetch(`https://api.themoviedb.org/3/discover/tv?api_key=${api_key}`);
+
+    const data = useSelector(state => state.movies.tvList)
+    const loading = useSelector(state => state.movies.loading)
+    const error = useSelector(state => state.movies.error)
 
 
     return (
@@ -36,14 +41,18 @@ export default function SeriesHome() {
                 {error && <p>ERROR: {error}</p>}
                 {loading && <p>Loading</p>}
                 {
-                    data.map((element) => {
+                    data?.map((element, index) => {
                         return (
-                            <div key={element.id}>
+                            <div key={index}>
                                 <SwiperSlide className='cursor-pointer'>
                                     <div className='flex flex-col'>
                                         <img className='w-[100%] rounded-lg' src={`https://image.tmdb.org/t/p/w1280/${element.backdrop_path}`} />
                                         <div className='text-white flex flex-col gap-1 pl-2 '>
-                                            <p>{element.original_name.slice(0, 32)}</p>
+                                            <p>{element.original_name
+                                                ? element.original_name.slice(0, 13)
+                                                : element.original_title
+                                                    ? element.original_title.slice(0, 32)
+                                                    : 'No title available'}</p>
                                             <div className='flex flex-col gap-1 '>
                                                 <span className='text-slate-700'> Accion, Terror</span>
                                                 <span>{`⭐ ${element.vote_average}`}</span>
